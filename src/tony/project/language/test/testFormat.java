@@ -139,49 +139,49 @@ public class testFormat {
 	 reason: scoreDetails Object has Map<String, String> field which cannot be parsed by 
 	 		 Bootstrap Table
 	====================================================================================*/
-	@Test
-	public void listFormat(){
-		
-		String filterConditionName = "CourseCode";
-		String filterConditionValue = "15WinL1Gar";
-		
-		resultJSON = new ArrayList<>();
-		
-		List<ScoresDetail> scoresDetails = scoresDetailDM.loadScoresDetails(filterConditionName, filterConditionValue);
-		
-		
-		String resultJSON = resultListToJSON(scoresDetails);
-		
-		System.out.println(resultJSON);
-		
-	}
-	
-	private String resultListToJSON(List resultList){
-		
-		Iterator<ScoresDetail> listIterator = resultList.iterator();
-		
-		while(listIterator.hasNext()){
-			item = new JSONHashMap<>();
-			
-			ScoresDetail s = listIterator.next();
-			item.put("StudentID", s.getStudentID().toString());
-			item.put("CourseCode", s.getCourseCode());
-			item.put("FirstName", s.getFirstName());
-			item.put("Surname", s.getSurname());
-			
-			Iterator g = s.getGrades().entrySet().iterator();
-			while(g.hasNext()){
-				
-				Map.Entry<String, String> gMap = (Entry<String, String>) g.next();
-				item.put(gMap.getKey(), gMap.getValue());
-				
-			}
-			
-			resultJSON.add(item);
-		}
-		
-		return resultJSON.toString();
-	}
+//	@Test
+//	public void listFormat(){
+//		
+//		String filterConditionName = "CourseCode";
+//		String filterConditionValue = "15WinL1Gar";
+//		
+//		resultJSON = new ArrayList<>();
+//		
+//		List<ScoresDetail> scoresDetails = scoresDetailDM.loadScoresDetails(filterConditionName, filterConditionValue);
+//		
+//		
+//		String resultJSON = resultListToJSON(scoresDetails);
+//		
+//		System.out.println(resultJSON);
+//		
+//	}
+//	
+//	private String resultListToJSON(List resultList){
+//		
+//		Iterator<ScoresDetail> listIterator = resultList.iterator();
+//		
+//		while(listIterator.hasNext()){
+//			item = new JSONHashMap<>();
+//			
+//			ScoresDetail s = listIterator.next();
+//			item.put("StudentID", s.getStudentID().toString());
+//			item.put("CourseCode", s.getCourseCode());
+//			item.put("FirstName", s.getFirstName());
+//			item.put("Surname", s.getSurname());
+//			
+//			Iterator g = s.getGrades().entrySet().iterator();
+//			while(g.hasNext()){
+//				
+//				Map.Entry<String, String> gMap = (Entry<String, String>) g.next();
+//				item.put(gMap.getKey(), gMap.getValue());
+//				
+//			}
+//			
+//			resultJSON.add(item);
+//		}
+//		
+//		return resultJSON.toString();
+//	}
 	
 	
 }
