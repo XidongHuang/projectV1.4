@@ -1,5 +1,6 @@
 package tony.project.language.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
@@ -21,6 +22,7 @@ public class Course extends RootObject<Course> implements CourseDM {
 	private Double attendance;
 	private Double passRate;
 	private Integer failStudentAmount;
+	private ArrayList<String> scoresNamesInOrder;
 	
 	@DynamoDBHashKey(attributeName="CourseCode")
 	public String getCourseCode() {return courseCode;}
@@ -63,11 +65,15 @@ public class Course extends RootObject<Course> implements CourseDM {
 	public Integer getFailStudentAmount() {return failStudentAmount;}
 	public void setFailStudentAmount(Integer failStudentAmount) {this.failStudentAmount = failStudentAmount;}
 	
+	@DynamoDBAttribute(attributeName="ScoresNamesInOrder")
+	public ArrayList<String> getScoresNamesInOrder() {return scoresNamesInOrder;}
+	public void setScoresNamesInOrder(ArrayList<String> scoresNamesInOrder) {this.scoresNamesInOrder = scoresNamesInOrder;}
+	
 	
 	
 	public Course(String courseCode, String semester, String courseName, Integer levelID, Integer instructorID,
 			Integer studentAmount, List<Integer> students, Double attendance, Double passRate,
-			Integer failStudentAmount) {
+			Integer failStudentAmount, ArrayList<String> scoresNamesInOrder) {
 		super();
 		this.courseCode = courseCode;
 		this.semester = semester;
@@ -79,22 +85,19 @@ public class Course extends RootObject<Course> implements CourseDM {
 		this.attendance = attendance;
 		this.passRate = passRate;
 		this.failStudentAmount = failStudentAmount;
+		this.scoresNamesInOrder = scoresNamesInOrder;
 	}
-	
 	public Course() {
 		super();
 	}
-	
 	
 	@Override
 	public String toString() {
 		return "Course [courseCode=" + courseCode + ", semester=" + semester + ", courseName=" + courseName
 				+ ", levelID=" + levelID + ", instructorID=" + instructorID + ", studentAmount=" + studentAmount
 				+ ", students=" + students + ", attendance=" + attendance + ", passRate=" + passRate
-				+ ", failStudentAmount=" + failStudentAmount + "]";
+				+ ", failStudentAmount=" + failStudentAmount + ", scoresNamesInOrder=" + scoresNamesInOrder + "]";
 	}
-	
-	
 	
 	@Override
 	public void saveACourse(Course course) {

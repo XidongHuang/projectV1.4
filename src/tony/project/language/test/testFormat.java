@@ -29,6 +29,20 @@ public class testFormat {
 	private ObjectMapper mapper = null;
 	
 	
+	
+	
+	@Test
+	public void testList(){
+		
+		ArrayList<String> a = new ArrayList<>();
+		System.out.println(a);
+		System.out.println(a==null);
+		
+		
+	}
+	
+	
+	
 	/*
 	 *  Format JSON into 
 	 * 

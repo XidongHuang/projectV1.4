@@ -26,9 +26,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import tony.project.language.domain.Course;
 import tony.project.language.domain.ScoresDetail;
 import tony.project.language.formatter.JSON2ArrayListFormatter;
 import tony.project.language.formatter.JSONHashMap;
+import tony.project.language.interfaces.CourseDM;
 import tony.project.language.interfaces.JSON2ArrayFormatterOM;
 import tony.project.language.interfaces.ScoresDetailDM;
 
@@ -40,6 +42,7 @@ public class LoadServlet extends HttpServlet {
 	private Map<String, String> item = null;
 	private List<HashMap<String, String>> resultJSON = null;
 	private JSON2ArrayFormatterOM json2ArrayFormatterOM = new JSON2ArrayListFormatter();
+	private CourseDM courseDM = null;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -102,11 +105,14 @@ public class LoadServlet extends HttpServlet {
 
 	
 private void uploadFile(HttpServletRequest request, HttpServletResponse response){
+		courseDM = new Course();
+		ArrayList<String> courseScoresOrder = new ArrayList<>();
+
 		
 		String tag = (String)request.getAttribute("uploadingTag");
-		
+		System.out.println(tag);
 		String uploadingTag = tag.replaceAll("\"", "");
-		
+		System.out.println("===="+uploadingTag+"====");
 		
 		File file = null;
 		FileInputStream fileInputStream = null;
@@ -126,9 +132,14 @@ private void uploadFile(HttpServletRequest request, HttpServletResponse response
 			
 			
 			System.out.println(str);
-			resultJSON = json2ArrayFormatterOM.uploadingJSONFormat(str);
+//			resultJSON = json2ArrayFormatterOM.uploadingJSONFormat(str);
+			Course loadingCourse = courseDM.loadACourse(uploadingTag);
+			if(loadingCourse != null){
 			
-			request.setAttribute("resultJSON", resultJSON);
+				courseScoresOrder = loadingCourse.getScoresNamesInOrder();
+			} 
+//			System.out.println("uploadfile resultJSON: ==="+ resultJSON);
+			request.setAttribute("tableAttributes", courseScoresOrder);
 			request.getRequestDispatcher("table.jsp").forward(request, response);
 
 			
@@ -159,7 +170,8 @@ private void uploadFile(HttpServletRequest request, HttpServletResponse response
 	
 	private void loadScores(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		courseDM = new Course();
+		ArrayList<String> courseScoresOrder = new ArrayList<>();
 		String levelAndcourse = (String) request.getAttribute("loadingRequest");
 
 		String filterConditionValue = levelAndcourse.replaceAll("\"", "");
@@ -173,7 +185,18 @@ private void uploadFile(HttpServletRequest request, HttpServletResponse response
 		ArrayList<HashMap<String, String>> resultJSON = resultListToJSON(scoresDetails);
 		System.out.println(resultJSON);
 		overwriteJSON(resultJSON.toString(), filterConditionValue);
-		request.setAttribute("resultJSON", resultJSON);
+		
+		Course loadingCourse = courseDM.loadACourse(filterConditionValue);
+		System.out.println("===loadingCourse:==="+loadingCourse);
+		if(loadingCourse != null){
+			if(loadingCourse.getScoresNamesInOrder() != null){
+			courseScoresOrder = loadingCourse.getScoresNamesInOrder();
+			}
+		} 
+		
+		System.out.println("courseScoresOrder: ====== "+ (courseScoresOrder == null));
+//		request.setAttribute("resultJSON", resultJSON);
+		request.setAttribute("tableAttributes", courseScoresOrder);
 		request.getRequestDispatcher("table.jsp").forward(request, response);
 		System.out.println(resultJSON);
 

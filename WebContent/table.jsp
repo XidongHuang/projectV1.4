@@ -52,12 +52,17 @@
 
 		List<String> attributeNames = null;
 
-		ArrayList<HashMap<String, String>> resultJSON = (ArrayList<HashMap<String, String>>) request
-				.getAttribute("resultJSON");
-	//	System.out.println(resultJSON == null);
-		if (level != null && course != null && resultJSON == null && term != null && uploadingTag == null) {
+	//	ArrayList<HashMap<String, String>> resultJSON = (ArrayList<HashMap<String, String>>) request
+	//			.getAttribute("resultJSON");
+	
+	ArrayList<String> tableAttributes = (ArrayList<String>)request.getAttribute("tableAttributes");
+	
+		System.out.println(tableAttributes == null);
+		if (level != null && course != null && tableAttributes == null && term != null && uploadingTag == null) {
 			//System.out.println(level+course);
 			//try{
+			System.out.println("No resultJSON and Saving!------");
+			
 			request.setAttribute("loadingRequest", loadingRequest);
 			request.getRequestDispatcher("/loadScores.do").forward(request, response);
 
@@ -66,18 +71,17 @@
 			//	e.printStackTrace();
 			//}
 
-	//		System.out.println("No resultJSON and Saving!------");
 
 		}
 
-		if (resultJSON != null & level != null && course != null && term != null && uploadingTag == null) {
+		if (tableAttributes != null & level != null && course != null && term != null && uploadingTag == null) {
 
-		//	System.out.println("No savingTag!!------");
+			System.out.println("No savingTag!!------");
 		//	System.out.println(resultJSON);
 		//	System.out.println(resultJSON.size());
 
-			if (!resultJSON.isEmpty()) {
-				HashMap<String, String> item = resultJSON.get(0);
+			if (!tableAttributes.isEmpty()) {
+			/*	HashMap<String, String> item = resultJSON.get(0);
 
 				attributeNames = new ArrayList<String>();
 
@@ -90,7 +94,19 @@
 						attributeNames.add(key);
 					}
 
+				}*/
+				attributeNames = new ArrayList<String>();
+				for(String key : tableAttributes){
+					if (!key.equals("FirstName") && 
+							!key.equals("Surname") && 
+							!key.equals("StudentID") && 
+							!key.equals("FinalMarks") && 
+							!key.equals("CourseCode")) {
+						attributeNames.add(key);
+					}
 				}
+				
+				
 
 			} else {
 
@@ -99,8 +115,8 @@
 
 		}
 
-		if (uploadingTag != null && resultJSON == null) {
-		//	System.out.println("SavingTag is Here --------");
+		if (uploadingTag != null && tableAttributes == null) {
+			System.out.println("SavingTag is Here --------");
 		//	System.out.println("------attributeNames: " + (attributeNames == null));
 
 			request.setAttribute("uploadingTag", uploadingTag);
@@ -108,13 +124,13 @@
 
 		}
 
-		if (uploadingTag != null && resultJSON != null) {
+		if (uploadingTag != null && tableAttributes != null) {
 			System.out.println(uploadingTag + "====");
 			System.out.println("uploadingTag and resultJSON!!!====");
 			loadingRequest = uploadingTag;
 
-			if (!resultJSON.isEmpty()) {
-				HashMap<String, String> item = resultJSON.get(0);
+			if (!tableAttributes.isEmpty()) {
+				/*HashMap<String, String> item = resultJSON.get(0);
 
 				attributeNames = new ArrayList<String>();
 
@@ -126,8 +142,24 @@
 							!key.equals("CourseCode")) {
 						attributeNames.add(key);
 					}
+					
+					
 
+				}*/
+				attributeNames = new ArrayList<String>();
+				for(String key : tableAttributes){
+					if (!key.equals("FirstName") && 
+							!key.equals("Surname") && 
+							!key.equals("StudentID") && 
+							!key.equals("FinalMarks") && 
+							!key.equals("CourseCode")) {
+						attributeNames.add(key);
+					}
 				}
+				
+				
+				
+					
 			} else {
 				loadingRequest = "empty";
 			}
@@ -163,8 +195,8 @@
 				%>
 				<th data-field="FinalMarks" data-editable="true"
 					data-sortable="true">FinalMarks</th>
-				<th data-field="CourseCode" data-editable="true"
-					data-sortable="true">CourseCode</th>
+				<th data-field="CourseCode" data-editable="false"
+					data-sortable="false">CourseCode</th>
 
 			</tr>
 		</thead>

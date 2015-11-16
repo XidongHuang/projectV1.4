@@ -76,13 +76,15 @@ public class ExcelToJSON implements ExcelToJSONOM {
 
 				} // finished putting one item in json
 
-				
 				values.clear();
 				
 				
 				rowCount++;
 
 			} // finished all rows in one sheet
+			
+			//set Course class: setCourseScoresOrder(attributes);
+			System.out.println("Excel attributes: ======"+attributes);
 
 			json = jsons.toString();
 			return json;
@@ -105,6 +107,75 @@ public class ExcelToJSON implements ExcelToJSONOM {
 		return json;
 	}
 
+	@Override
+	public ArrayList<String> getAttributeNames(InputStream fileInputStream) {
+		int rowCount = 0;
+
+		try {
+
+			
+			
+			workbook = new XSSFWorkbook(fileInputStream);
+			sheet = workbook.getSheetAt(0);
+
+			attributes = new ArrayList<>();
+			values = new ArrayList<>();
+
+			Iterator<Row> rowIterator = sheet.rowIterator();
+
+			while (rowIterator.hasNext()) {
+
+				Row row = rowIterator.next();
+
+				Iterator<Cell> cellIterator = row.cellIterator();
+
+				while (cellIterator.hasNext()) {
+
+					Cell cell = cellIterator.next();
+
+					if (rowCount < 1) {
+
+						getAttributes(cell);
+
+					} else {
+
+						getValues(cell);
+
+					}
+
+				} // finished all cells in one row
+				
+				
+				rowCount++;
+
+			} // finished all rows in one sheet
+			
+			//set Course class: setCourseScoresOrder(attributes);
+			System.out.println("Excel attributes: ======"+attributes);
+
+			
+			return (ArrayList<String>) attributes;
+
+		} catch (Exception e) {
+			System.err.println(e.getMessage() + 1);
+
+		} finally {
+
+			
+			try {
+				fileInputStream.close();
+			} catch (Exception e2) {
+
+				System.err.println(e2.getMessage());
+			}
+
+		}
+
+		return (ArrayList<String>) attributes;
+
+	}
+	
+	
 	private void getItem() {
 		item = new JSONHashMap<String, String>();
 
@@ -156,5 +227,6 @@ public class ExcelToJSON implements ExcelToJSONOM {
 
 		}
 	}
+
 
 }

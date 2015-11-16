@@ -19,8 +19,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import tony.project.language.domain.Course;
 import tony.project.language.formatter.ExcelToJSON;
 import tony.project.language.formatter.JSON2ArrayListFormatter;
+import tony.project.language.interfaces.CourseDM;
 import tony.project.language.interfaces.ExcelToJSONOM;
 import tony.project.language.interfaces.JSON2ArrayFormatterOM;
 
@@ -31,6 +33,8 @@ public class HandleServlet extends HttpServlet {
 	private ExcelToJSONOM excelToJSONOM = new ExcelToJSON();
 	private JSON2ArrayFormatterOM json2ArrayFormatterOM = new JSON2ArrayListFormatter();
 	private List<HashMap<String, String>> resultJSON = null;
+	private CourseDM courseDM = null;
+	
 	
 	private static final long serialVersionUID = 1L;
 
@@ -48,7 +52,7 @@ public class HandleServlet extends HttpServlet {
 		String uploadingTag = request.getParameter("uploadTag");
 		System.out.println(uploadingTag);
 		
-		
+		courseDM = new Course();
 		
 		File fold;
 		InputStream fileContent = null;
@@ -71,6 +75,14 @@ public class HandleServlet extends HttpServlet {
 			
 			//Excel in JSON format
 			String excel = excelToJSONOM.getJSON(fileContent);
+			//get attributeNames in order from excel
+			ArrayList<String> attributeNames = excelToJSONOM.getAttributeNames(fileContent);
+			System.out.println("handleServlet: ====== "+attributeNames);
+			
+			Course handingCourse = new Course();
+			handingCourse.setCourseCode(uploadingTag);
+			handingCourse.setScoresNamesInOrder(attributeNames);
+			courseDM.saveACourse(handingCourse);
 			
 			System.out.println("print excel!====="+excel);
 

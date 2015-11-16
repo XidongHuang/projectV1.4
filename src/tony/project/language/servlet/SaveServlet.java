@@ -36,15 +36,15 @@ public class SaveServlet extends HttpServlet {
 		System.out.println(courseCode);
 		
 		List<ScoresDetail> scores = scoresDetailDM.getScoresDetailFromJSON(jsonStr);
-		System.out.println(scores.isEmpty());
+		System.out.println("scores are saving ===== "+scores);
 		scoresDetailDM.batchSaveScoresDetail(scores, courseCode);
 		
 		
 		response.setContentType("text/plain");
 	    response.setCharacterEncoding("UTF-8");
 	    response.getWriter().write("Success!");
-		
-	    
+		String uploadingTag = courseCode;
+	    request.getRequestDispatcher("index.jsp?uploadingTag="+uploadingTag).forward(request, response);
 		
 	
 	
